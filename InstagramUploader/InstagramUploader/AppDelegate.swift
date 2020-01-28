@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     window = UIWindow()
     window?.makeKeyAndVisible()
-    let navVC = UINavigationController(rootViewController: UploadImageViewController())
+    let navVC = UINavigationController(rootViewController: UploadImageViewController(viewModel: .init()))
     window?.rootViewController = navVC
 
     return true

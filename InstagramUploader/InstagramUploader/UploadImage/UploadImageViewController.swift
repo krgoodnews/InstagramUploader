@@ -9,17 +9,29 @@
 import UIKit
 import Photos
 
+import RxSwift
 import SnapKit
 import Then
 
 /// 스샷을 Pick하고 업로드하기 위한 VC
 final class UploadImageViewController: UIViewController {
 
-  // MARK: - View Cycle
+  private let viewModel: UploadImageViewModel
+  private let disposeBag = DisposeBag()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    setupViews()
+  private func setupObserver() {
+    viewModel.bindableImageRatio.bind { [weak self] ratio in
+      guard let self = self else { return }
+      self.changeRatioButton.setImage(ratio.buttonIcon, for: .normal)
+      self.imageProcessView.snp.remakeConstraints {
+        $0.centerY.equalToSuperview().offset(-68)
+        $0.left.right.equalToSuperview()
+        $0.height.equalTo(self.imageProcessView.snp.width).multipliedBy(ratio.heightRatio)
+      }
+      UIView.animate(withDuration: 0.2) {
+        self.view.layoutIfNeeded()
+      }
+    }.disposed(by: disposeBag)
   }
 
   // MARK: - Views
@@ -29,33 +41,68 @@ final class UploadImageViewController: UIViewController {
     $0.delegate = self
   }
 
+  private lazy var buttonsStackView = UIStackView(arrangedSubviews: [
+    self.pickImageButton,
+    self.changeRatioButton
+  ]).then {
+    $0.distribution = .fillEqually
+    $0.spacing = 16
+  }
+
   private lazy var pickImageButton = UIButton().then {
-    $0.setTitle("이미지 고르기", for: .normal)
-    $0.backgroundColor = .systemRed
-    $0.layer.cornerRadius = 12
+    $0.setImage(UIImage(named: "iconAddPhoto"), for: .normal)
+    $0.tintColor = UIColor.label.withAlphaComponent(0.7)
     $0.addTarget(self, action: #selector(didTapPick), for: .touchUpInside)
+  }
+
+  private lazy var changeRatioButton = UIButton().then {
+    $0.tintColor = UIColor.label.withAlphaComponent(0.7)
+    $0.setImage(UIImage(named: "iconRatio45"), for: .normal)
+    $0.addTarget(self, action: #selector(didTapChangeRatio), for: .touchUpInside)
   }
 
   private let imageProcessView = ImageProcessView()
 
   private func setupViews() {
     // setup Nav Bar
-    let shareBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(didTapShare))
-    navigationItem.rightBarButtonItem = shareBarButton
+    let infoButton = UIButton(type: .infoLight).then {
+      $0.addTarget(self, action: #selector(didTapShare), for: .touchUpInside)
+      $0.tintColor = .label
+    }
+    let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
+    navigationItem.rightBarButtonItem = infoBarButtonItem
+
+    navigationController?.navigationBar.do {
+      $0.backgroundColor = .clear
+      $0.isTranslucent = false
+    }
+
+    view.backgroundColor = .systemBackground
 
     // setup Layout
-    view.addSubviews(pickImageButton, imageProcessView)
+    view.addSubviews(buttonsStackView, imageProcessView)
 
-    pickImageButton.snp.makeConstraints {
+    buttonsStackView.snp.makeConstraints {
       $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
-      $0.height.equalTo(52)
+      $0.height.equalTo(60)
     }
 
-    imageProcessView.snp.makeConstraints {
-      $0.centerY.equalToSuperview().offset(-26)
-      $0.left.right.equalToSuperview()
-      $0.height.equalTo(imageProcessView.snp.width)
+    // Deco
+    let stackViewsBackgroundView = UIView().then {
+      $0.layer.cornerRadius = 12
+      $0.backgroundColor = .systemGray6
     }
+    view.insertSubview(stackViewsBackgroundView, belowSubview: buttonsStackView)
+
+    stackViewsBackgroundView.snp.makeConstraints {
+      $0.edges.equalTo(buttonsStackView)
+    }
+
+  }
+
+  @objc private func didTapSetting() {
+    let appInfoVC = AppInfoViewController()
+    navigationController?.pushViewController(appInfoVC, animated: true)
   }
 
   @objc private func didTapShare() {
@@ -93,16 +140,38 @@ final class UploadImageViewController: UIViewController {
   @objc private func didTapPick() {
     present(imagePicker, animated: true, completion: nil)
   }
+
+  @objc private func didTapChangeRatio() {
+    viewModel.changeRatio()
+  }
+
+  // MARK: - View Cycle
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setupViews()
+    setupObserver()
+  }
+
+  // MARK: - Init
+  init(viewModel: UploadImageViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
 }
 
 extension UploadImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     guard let selectedImage = info[.originalImage] as? UIImage else { return }
-    self.imageProcessView.image = selectedImage
-    dismiss(animated: true, completion: nil)
-  }
+      self.imageProcessView.image = selectedImage
+      dismiss(animated: true, completion: nil)
+    }
 
-  func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    dismiss(animated: true, completion: nil)
-  }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+      dismiss(animated: true, completion: nil)
+    }
 }

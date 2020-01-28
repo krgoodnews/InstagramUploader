@@ -13,6 +13,8 @@
 		E659711B23D8ACF700C01764 /* ImageProcessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659711A23D8ACF700C01764 /* ImageProcessView.swift */; };
 		E659711E23D8AEA300C01764 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659711D23D8AEA300C01764 /* UIView+.swift */; };
 		E659712023D8B83D00C01764 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659711F23D8B83D00C01764 /* UIImage+.swift */; };
+		E659712223DC7D5B00C01764 /* UploadImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659712123DC7D5B00C01764 /* UploadImageViewModel.swift */; };
+		E659712523E0A83200C01764 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659712423E0A83200C01764 /* AppInfoViewController.swift */; };
 		E68B3FDA23CE11CD0015BD04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */; };
 		E68B3FE123CE11CD0015BD04 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E68B3FDF23CE11CD0015BD04 /* Main.storyboard */; };
 		E68B3FE323CE11D00015BD04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E68B3FE223CE11D00015BD04 /* Assets.xcassets */; };
@@ -40,7 +42,9 @@
 		E659711A23D8ACF700C01764 /* ImageProcessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessView.swift; sourceTree = "<group>"; };
 		E659711D23D8AEA300C01764 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		E659711F23D8B83D00C01764 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
-		E68B3FD623CE11CD0015BD04 /* InstagramUploader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramUploader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E659712123DC7D5B00C01764 /* UploadImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageViewModel.swift; sourceTree = "<group>"; };
+		E659712423E0A83200C01764 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
+		E68B3FD623CE11CD0015BD04 /* 스샷그램.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "스샷그램.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E68B3FE023CE11CD0015BD04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E68B3FE223CE11D00015BD04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				E659711823D8933400C01764 /* UploadImageViewController.swift */,
+				E659712123DC7D5B00C01764 /* UploadImageViewModel.swift */,
 				E659711A23D8ACF700C01764 /* ImageProcessView.swift */,
 			);
 			path = UploadImage;
@@ -108,6 +113,14 @@
 				E659711F23D8B83D00C01764 /* UIImage+.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		E659712323E0A82500C01764 /* App Info */ = {
+			isa = PBXGroup;
+			children = (
+				E659712423E0A83200C01764 /* AppInfoViewController.swift */,
+			);
+			path = "App Info";
 			sourceTree = "<group>";
 		};
 		E68B3FCD23CE11CD0015BD04 = {
@@ -124,7 +137,7 @@
 		E68B3FD723CE11CD0015BD04 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E68B3FD623CE11CD0015BD04 /* InstagramUploader.app */,
+				E68B3FD623CE11CD0015BD04 /* 스샷그램.app */,
 				E68B3FEC23CE11D00015BD04 /* InstagramUploaderTests.xctest */,
 			);
 			name = Products;
@@ -135,6 +148,7 @@
 			children = (
 				E659711C23D8AE9200C01764 /* Extension */,
 				E659711723D892D600C01764 /* UploadImage */,
+				E659712323E0A82500C01764 /* App Info */,
 				E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */,
 				E68B3FDF23CE11CD0015BD04 /* Main.storyboard */,
 				E68B3FE223CE11D00015BD04 /* Assets.xcassets */,
@@ -172,7 +186,7 @@
 			);
 			name = InstagramUploader;
 			productName = InstagramUploader;
-			productReference = E68B3FD623CE11CD0015BD04 /* InstagramUploader.app */;
+			productReference = E68B3FD623CE11CD0015BD04 /* 스샷그램.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E68B3FEB23CE11D00015BD04 /* InstagramUploaderTests */ = {
@@ -322,9 +336,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E659711923D8933400C01764 /* UploadImageViewController.swift in Sources */,
+				E659712223DC7D5B00C01764 /* UploadImageViewModel.swift in Sources */,
 				E659711B23D8ACF700C01764 /* ImageProcessView.swift in Sources */,
 				E659712023D8B83D00C01764 /* UIImage+.swift in Sources */,
 				E68B3FDA23CE11CD0015BD04 /* AppDelegate.swift in Sources */,
+				E659712523E0A83200C01764 /* AppInfoViewController.swift in Sources */,
 				E659711E23D8AEA300C01764 /* UIView+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -494,7 +510,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krgoodnews.InstagramUploader;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "스샷그램";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -513,7 +529,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krgoodnews.InstagramUploader;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "스샷그램";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

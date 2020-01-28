@@ -16,6 +16,9 @@ target 'InstagramUploader' do
   # Initializer
   pod 'Then'
 
+  pod 'RxSwift', '~> 5'
+  pod 'RxCocoa', '~> 5'
+
   target 'InstagramUploaderTests' do
     inherit! :search_paths
     # Pods for testing
