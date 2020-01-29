@@ -14,19 +14,25 @@ import Then
 
 final class ImageProcessView: UIView {
 
-  private let viewModel: UploadImageViewModel
+  private let viewModel: ProcessImageViewModel
   private let disposeBag = DisposeBag()
 
   private func setupObserver() {
     viewModel.bindableBackground.bind { [weak self] background in
       guard let self = self else { return }
-      switch background {
-      case .blur:
-        self.imageView.backgroundColor = .clear
-      case .color(let color):
-        self.imageView.backgroundColor = color
+      UIView.animate(withDuration: 0.2) {
+        self.updateBackground(background)
       }
     }.disposed(by: disposeBag)
+  }
+
+  private func updateBackground(_ background: ProcessImageViewModel.BackgroundType) {
+    switch background {
+    case .blur:
+      self.imageView.backgroundColor = .clear
+    case .color(let color):
+      self.imageView.backgroundColor = color
+    }
   }
 
   var image: UIImage? {
@@ -60,7 +66,7 @@ final class ImageProcessView: UIView {
   }
 
   // MARK: - Init
-  init(viewModel: UploadImageViewModel) {
+  init(viewModel: ProcessImageViewModel) {
     self.viewModel = viewModel
     super.init(frame: .zero)
     setupView()

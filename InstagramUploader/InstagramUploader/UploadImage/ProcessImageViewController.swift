@@ -1,5 +1,5 @@
 //
-//  UploadImageViewController.swift
+//  ProcessImageViewController.swift
 //  InstagramUploader
 //
 //  Created by Yunsu Guk on 2020/01/22.
@@ -7,16 +7,17 @@
 //
 
 import UIKit
-import Photos
 
 import RxSwift
 import SnapKit
 import Then
 
-/// 스샷을 Pick하고 업로드하기 위한 VC
-final class UploadImageViewController: UIViewController {
+private let contentColor = UIColor.label.withAlphaComponent(0.7)
 
-  private let viewModel: UploadImageViewModel
+/// 스샷을 Pick하고 업로드하기 위한 VC
+final class ProcessImageViewController: UIViewController {
+
+  private let viewModel: ProcessImageViewModel
   private let disposeBag = DisposeBag()
 
   private func setupObserver() {
@@ -54,7 +55,8 @@ final class UploadImageViewController: UIViewController {
   private lazy var buttonsStackView = UIStackView(arrangedSubviews: [
     self.pickImageButton,
     self.changeBackgroundButton,
-    self.changeRatioButton
+    self.changeRatioButton,
+    self.shareButton
   ]).then {
     $0.distribution = .fillEqually
     $0.spacing = 16
@@ -62,18 +64,29 @@ final class UploadImageViewController: UIViewController {
 
   private lazy var pickImageButton = UIButton().then {
     $0.setImage(UIImage(named: "iconAddPhoto"), for: .normal)
-    $0.tintColor = UIColor.label.withAlphaComponent(0.7)
+    $0.tintColor = contentColor
     $0.addTarget(self, action: #selector(didTapPick), for: .touchUpInside)
   }
 
   private lazy var changeBackgroundButton = UIButton().then {
-    $0.tintColor = UIColor.label.withAlphaComponent(0.7)
+    $0.isHidden = true
+    $0.tintColor = contentColor
+    $0.setTitleColor(contentColor, for: .normal)
     $0.addTarget(self, action: #selector(didTapChangeBackground), for: .touchUpInside)
   }
 
   private lazy var changeRatioButton = UIButton().then {
-    $0.tintColor = UIColor.label.withAlphaComponent(0.7)
+    $0.isHidden = true
+    $0.tintColor = contentColor
     $0.addTarget(self, action: #selector(didTapChangeRatio), for: .touchUpInside)
+  }
+
+  private lazy var shareButton = UIButton().then {
+    $0.isHidden = true
+    $0.setTitle("Share", for: .normal)
+    $0.setTitleColor(contentColor, for: .normal)
+    $0.tintColor = contentColor
+    $0.addTarget(self, action: #selector(didTapShare), for: .touchUpInside)
   }
 
   private lazy var imageProcessView = ImageProcessView(viewModel: viewModel)
@@ -124,35 +137,7 @@ final class UploadImageViewController: UIViewController {
   }
 
   @objc private func didTapShare() {
-    postImageToInstagram(image: imageProcessView.asImage())
-  }
-
-  func postImageToInstagram(image: UIImage) {
-    UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-  }
-
-  @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-    if let error = error {
-      print(error)
-      return
-    }
-
-    let fetchOptions = PHFetchOptions().then {
-      $0.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-    }
-
-    let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-    if let lastAsset = fetchResult.firstObject {
-      let url = URL(string: "instagram://library?LocalIdentifier=\(lastAsset.localIdentifier)")!
-
-      if UIApplication.shared.canOpenURL(url) {
-        UIApplication.shared.open(url)
-      } else {
-        let alertController = UIAlertController(title: "Error", message: "Instagram is not installed", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertController, animated: true, completion: nil)
-      }
-    }
+    viewModel.postImageToInstagram(image: imageProcessView.asImage())
   }
 
   @objc private func didTapPick() {
@@ -175,7 +160,7 @@ final class UploadImageViewController: UIViewController {
   }
 
   // MARK: - Init
-  init(viewModel: UploadImageViewModel) {
+  init(viewModel: ProcessImageViewModel) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
@@ -186,14 +171,17 @@ final class UploadImageViewController: UIViewController {
 
 }
 
-extension UploadImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ProcessImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     guard let selectedImage = info[.originalImage] as? UIImage else { return }
-      self.imageProcessView.image = selectedImage
-      dismiss(animated: true, completion: nil)
-    }
+    self.imageProcessView.image = selectedImage
+    changeRatioButton.isHidden = false
+    changeBackgroundButton.isHidden = false
+    shareButton.isHidden = false
+    dismiss(animated: true, completion: nil)
+  }
 
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-      dismiss(animated: true, completion: nil)
-    }
+  func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    dismiss(animated: true, completion: nil)
+  }
 }
