@@ -32,6 +32,16 @@ final class UploadImageViewController: UIViewController {
         self.view.layoutIfNeeded()
       }
     }.disposed(by: disposeBag)
+
+    viewModel.bindableBackground.bind { [weak self] background in
+      guard let self = self else { return }
+      switch background {
+      case .blur:
+        self.changeBackgroundButton.setTitle("블러", for: .normal)
+      case .color(_):
+        self.changeBackgroundButton.setTitle("컬러", for: .normal)
+      }
+    }.disposed(by: disposeBag)
   }
 
   // MARK: - Views
@@ -43,6 +53,7 @@ final class UploadImageViewController: UIViewController {
 
   private lazy var buttonsStackView = UIStackView(arrangedSubviews: [
     self.pickImageButton,
+    self.changeBackgroundButton,
     self.changeRatioButton
   ]).then {
     $0.distribution = .fillEqually
@@ -55,20 +66,27 @@ final class UploadImageViewController: UIViewController {
     $0.addTarget(self, action: #selector(didTapPick), for: .touchUpInside)
   }
 
+  private lazy var changeBackgroundButton = UIButton().then {
+    $0.tintColor = UIColor.label.withAlphaComponent(0.7)
+    $0.addTarget(self, action: #selector(didTapChangeBackground), for: .touchUpInside)
+  }
+
   private lazy var changeRatioButton = UIButton().then {
     $0.tintColor = UIColor.label.withAlphaComponent(0.7)
-    $0.setImage(UIImage(named: "iconRatio45"), for: .normal)
     $0.addTarget(self, action: #selector(didTapChangeRatio), for: .touchUpInside)
   }
 
-  private let imageProcessView = ImageProcessView()
+  private lazy var imageProcessView = ImageProcessView(viewModel: viewModel)
 
   private func setupViews() {
     // setup Nav Bar
     let infoButton = UIButton(type: .infoLight).then {
-      $0.addTarget(self, action: #selector(didTapShare), for: .touchUpInside)
+      $0.contentHorizontalAlignment = .right
+      $0.frame = .init(x: 0, y: 0, width: 52, height: 44)
       $0.tintColor = .label
+      $0.addTarget(self, action: #selector(didTapSetting), for: .touchUpInside)
     }
+
     let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
     navigationItem.rightBarButtonItem = infoBarButtonItem
 
@@ -77,7 +95,7 @@ final class UploadImageViewController: UIViewController {
       $0.isTranslucent = false
     }
 
-    view.backgroundColor = .systemBackground
+    view.backgroundColor = .secondarySystemBackground
 
     // setup Layout
     view.addSubviews(buttonsStackView, imageProcessView)
@@ -90,7 +108,7 @@ final class UploadImageViewController: UIViewController {
     // Deco
     let stackViewsBackgroundView = UIView().then {
       $0.layer.cornerRadius = 12
-      $0.backgroundColor = .systemGray6
+      $0.backgroundColor = .systemGray5
     }
     view.insertSubview(stackViewsBackgroundView, belowSubview: buttonsStackView)
 
@@ -143,6 +161,10 @@ final class UploadImageViewController: UIViewController {
 
   @objc private func didTapChangeRatio() {
     viewModel.changeRatio()
+  }
+
+  @objc private func didTapChangeBackground() {
+    viewModel.changeBackground()
   }
 
   // MARK: - View Cycle

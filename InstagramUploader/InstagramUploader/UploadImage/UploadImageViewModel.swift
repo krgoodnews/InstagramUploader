@@ -42,7 +42,13 @@ final class UploadImageViewModel {
     }
   }
 
+  enum BackgroundType {
+    case blur
+    case color(UIColor)
+  }
+
   let bindableImageRatio = BehaviorRelay<ImageRatioType>(value: .portrait)
+  let bindableBackground = BehaviorRelay<BackgroundType>(value: .blur)
 
   func changeRatio() {
     switch bindableImageRatio.value {
@@ -52,6 +58,15 @@ final class UploadImageViewModel {
       bindableImageRatio.accept(.landscape)
     case .landscape:
       bindableImageRatio.accept(.square)
+    }
+  }
+
+  func changeBackground() {
+    switch bindableBackground.value {
+    case .blur:
+      bindableBackground.accept(.color(.black))
+    case .color(_):
+      bindableBackground.accept(.blur)
     }
   }
 
