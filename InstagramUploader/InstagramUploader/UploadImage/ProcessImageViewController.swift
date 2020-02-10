@@ -23,26 +23,56 @@ final class ProcessImageViewController: UIViewController {
   private func setupObserver() {
     viewModel.bindableImageRatio.bind { [weak self] ratio in
       guard let self = self else { return }
-      self.changeRatioButton.setImage(ratio.buttonIcon, for: .normal)
-      self.imageProcessView.snp.remakeConstraints {
-        $0.centerY.equalToSuperview().offset(-68)
-        $0.left.right.equalToSuperview()
-        $0.height.equalTo(self.imageProcessView.snp.width).multipliedBy(ratio.heightRatio)
-      }
-      UIView.animate(withDuration: 0.2) {
-        self.view.layoutIfNeeded()
-      }
+      self.didSetRatio(ratio)
     }.disposed(by: disposeBag)
 
     viewModel.bindableBackground.bind { [weak self] background in
-      guard let self = self else { return }
-      switch background {
-      case .blur:
-        self.changeBackgroundButton.setTitle("블러", for: .normal)
-      case .color(_):
-        self.changeBackgroundButton.setTitle("컬러", for: .normal)
-      }
     }.disposed(by: disposeBag)
+  }
+
+  // MARK: - Inputs
+
+  @objc private func didTapAppInfo() {
+    let appInfoVC = AppInfoViewController()
+    navigationController?.pushViewController(appInfoVC, animated: true)
+  }
+
+  // MARK: Buttons stack view
+
+  @objc private func didTapShare() {
+    let activityVC = UIActivityViewController(
+      activityItems: [imageProcessView.asImage()],
+      applicationActivities: nil)
+    self.present(activityVC, animated: true, completion: nil)
+  }
+
+  @objc private func didTapPick() {
+    present(imagePicker, animated: true, completion: nil)
+  }
+
+  @objc private func didTapChangeRatio() {
+    viewModel.changeRatio()
+  }
+
+  @objc private func didTapChangeBackground() {
+    viewModel.changeBackground()
+  }
+
+  // MARK: - Outputs
+
+  private func didSetRatio(_ ratio: ProcessImageViewModel.ImageRatioType) {
+    changeRatioButton.setImage(ratio.buttonIcon, for: .normal)
+    imageProcessView.snp.remakeConstraints {
+      $0.top.left.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
+      $0.right.lessThanOrEqualTo(view.safeAreaLayoutGuide)
+      $0.bottom.lessThanOrEqualTo(buttonsStackView.snp.top)
+      $0.centerX.equalToSuperview()
+      $0.height.equalTo(imageProcessView.snp.width).multipliedBy(ratio.heightRatio)
+      $0.centerY.equalTo(view.safeAreaLayoutGuide).offset(-34)
+    }
+    UIView.animate(withDuration: 0.2) {
+      self.view.layoutIfNeeded()
+    }
   }
 
   // MARK: - Views
@@ -71,7 +101,7 @@ final class ProcessImageViewController: UIViewController {
   private lazy var changeBackgroundButton = UIButton().then {
     $0.isHidden = true
     $0.tintColor = contentColor
-    $0.setTitleColor(contentColor, for: .normal)
+    $0.setImage(UIImage(named: "iconBackground"), for: .normal)
     $0.addTarget(self, action: #selector(didTapChangeBackground), for: .touchUpInside)
   }
 
@@ -83,8 +113,7 @@ final class ProcessImageViewController: UIViewController {
 
   private lazy var shareButton = UIButton().then {
     $0.isHidden = true
-    $0.setTitle("Share", for: .normal)
-    $0.setTitleColor(contentColor, for: .normal)
+    $0.setImage(UIImage(named: "iconAction"), for: .normal)
     $0.tintColor = contentColor
     $0.addTarget(self, action: #selector(didTapShare), for: .touchUpInside)
   }
@@ -97,7 +126,7 @@ final class ProcessImageViewController: UIViewController {
       $0.contentHorizontalAlignment = .right
       $0.frame = .init(x: 0, y: 0, width: 52, height: 44)
       $0.tintColor = .label
-      $0.addTarget(self, action: #selector(didTapSetting), for: .touchUpInside)
+      $0.addTarget(self, action: #selector(didTapAppInfo), for: .touchUpInside)
     }
 
     let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
@@ -114,7 +143,7 @@ final class ProcessImageViewController: UIViewController {
     view.addSubviews(buttonsStackView, imageProcessView)
 
     buttonsStackView.snp.makeConstraints {
-      $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+      $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide).inset(8)
       $0.height.equalTo(60)
     }
 
@@ -129,27 +158,6 @@ final class ProcessImageViewController: UIViewController {
       $0.edges.equalTo(buttonsStackView)
     }
 
-  }
-
-  @objc private func didTapSetting() {
-    let appInfoVC = AppInfoViewController()
-    navigationController?.pushViewController(appInfoVC, animated: true)
-  }
-
-  @objc private func didTapShare() {
-    viewModel.postImageToInstagram(image: imageProcessView.asImage())
-  }
-
-  @objc private func didTapPick() {
-    present(imagePicker, animated: true, completion: nil)
-  }
-
-  @objc private func didTapChangeRatio() {
-    viewModel.changeRatio()
-  }
-
-  @objc private func didTapChangeBackground() {
-    viewModel.changeBackground()
   }
 
   // MARK: - View Cycle

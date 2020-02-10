@@ -71,10 +71,6 @@ final class ProcessImageViewModel: NSObject {
     }
   }
 
-  func postImageToInstagram(image: UIImage) {
-    UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-  }
-
   @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
     if let error = error {
       print(error)
