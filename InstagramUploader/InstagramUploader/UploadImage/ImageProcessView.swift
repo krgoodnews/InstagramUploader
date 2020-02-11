@@ -8,10 +8,32 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
 final class ImageProcessView: UIView {
+
+  private let viewModel: ProcessImageViewModel
+  private let disposeBag = DisposeBag()
+
+  private func setupObserver() {
+    viewModel.bindableBackground.bind { [weak self] background in
+      guard let self = self else { return }
+      UIView.animate(withDuration: 0.2) {
+        self.updateBackground(background)
+      }
+    }.disposed(by: disposeBag)
+  }
+
+  private func updateBackground(_ background: ProcessImageViewModel.BackgroundType) {
+    switch background {
+    case .blur:
+      self.imageView.backgroundColor = .clear
+    case .color(let color):
+      self.imageView.backgroundColor = color
+    }
+  }
 
   var image: UIImage? {
     didSet {
@@ -44,9 +66,11 @@ final class ImageProcessView: UIView {
   }
 
   // MARK: - Init
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+  init(viewModel: ProcessImageViewModel) {
+    self.viewModel = viewModel
+    super.init(frame: .zero)
     setupView()
+    setupObserver()
   }
 
   required init?(coder: NSCoder) {

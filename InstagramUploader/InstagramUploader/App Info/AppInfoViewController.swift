@@ -10,8 +10,13 @@ import UIKit
 
 final class AppInfoViewController: UIViewController {
 
+  private func setupViews() {
+    navigationItem.title = "Info"
+    view.backgroundColor = .secondarySystemBackground
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.navigationItem.title = "Info"
+    setupViews()
   }
 }
