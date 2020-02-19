@@ -6,6 +6,7 @@
 //  Copyright © 2020 Yunsu Guk. All rights reserved.
 //
 
+import SafariServices
 import UIKit
 
 final class AppInfoViewController: UIViewController {
@@ -35,10 +36,9 @@ final class AppInfoViewController: UIViewController {
   }
 
   @objc private func didTapGithub() {
-    guard let url = URL(string: "https://github.com/krgoodnews/InstagramUploader") else {
-      return
-    }
-    UIApplication.shared.open(url, options: [:])
+    guard let url = URL(string: "https://github.com/krgoodnews/InstagramUploader") else { return }
+    let safariVC = SFSafariViewController(url: url)
+    present(safariVC, animated: true, completion: nil)
   }
 
   private func setupViews() {
