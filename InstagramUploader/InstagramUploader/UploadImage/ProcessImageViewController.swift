@@ -26,8 +26,6 @@ final class ProcessImageViewController: UIViewController {
       self.didSetRatio(ratio)
     }.disposed(by: disposeBag)
 
-    viewModel.bindableBackground.bind { [weak self] background in
-    }.disposed(by: disposeBag)
   }
 
   // MARK: - Inputs
@@ -39,10 +37,16 @@ final class ProcessImageViewController: UIViewController {
 
   // MARK: Buttons stack view
 
-  @objc private func didTapShare() {
+  @objc private func didTapShare(_ sender: UIButton) {
     let activityVC = UIActivityViewController(
       activityItems: [imageProcessView.asImage()],
       applicationActivities: nil)
+
+    activityVC.popoverPresentationController?.do {
+      $0.sourceView = sender
+      $0.sourceRect = sender.bounds
+    }
+
     self.present(activityVC, animated: true, completion: nil)
   }
 
@@ -63,9 +67,10 @@ final class ProcessImageViewController: UIViewController {
   private func didSetRatio(_ ratio: ProcessImageViewModel.ImageRatioType) {
     changeRatioButton.setImage(ratio.buttonIcon, for: .normal)
     imageProcessView.snp.remakeConstraints {
-      $0.top.left.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
+      $0.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide).offset(16)
+      $0.left.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
       $0.right.lessThanOrEqualTo(view.safeAreaLayoutGuide)
-      $0.bottom.lessThanOrEqualTo(buttonsStackView.snp.top)
+      $0.bottom.lessThanOrEqualTo(buttonsStackView.snp.top).offset(-16)
       $0.centerX.equalToSuperview()
       $0.height.equalTo(imageProcessView.snp.width).multipliedBy(ratio.heightRatio)
       $0.centerY.equalTo(view.safeAreaLayoutGuide).offset(-34)
@@ -115,9 +120,10 @@ final class ProcessImageViewController: UIViewController {
     $0.isHidden = true
     $0.setImage(UIImage(named: "iconAction"), for: .normal)
     $0.tintColor = contentColor
-    $0.addTarget(self, action: #selector(didTapShare), for: .touchUpInside)
+    $0.addTarget(self, action: #selector(didTapShare(_:)), for: .touchUpInside)
   }
 
+  /// 실제 편집된 이미지가 표시되는 View
   private lazy var imageProcessView = ImageProcessView(viewModel: viewModel)
 
   private func setupViews() {
@@ -137,7 +143,7 @@ final class ProcessImageViewController: UIViewController {
       $0.isTranslucent = false
     }
 
-    view.backgroundColor = .secondarySystemBackground
+    view.backgroundColor = .systemGray
 
     // setup Layout
     view.addSubviews(buttonsStackView, imageProcessView)
