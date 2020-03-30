@@ -15,6 +15,8 @@
 		E659712023D8B83D00C01764 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659711F23D8B83D00C01764 /* UIImage+.swift */; };
 		E659712223DC7D5B00C01764 /* ProcessImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659712123DC7D5B00C01764 /* ProcessImageViewModel.swift */; };
 		E659712523E0A83200C01764 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659712423E0A83200C01764 /* AppInfoViewController.swift */; };
+		E6747C082432209B0031A11D /* CenteredButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6747C072432209B0031A11D /* CenteredButton.swift */; };
+		E6747C0A2432212E0031A11D /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6747C092432212E0031A11D /* UIFont+.swift */; };
 		E68B3FDA23CE11CD0015BD04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */; };
 		E68B3FE123CE11CD0015BD04 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E68B3FDF23CE11CD0015BD04 /* Main.storyboard */; };
 		E68B3FE323CE11D00015BD04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E68B3FE223CE11D00015BD04 /* Assets.xcassets */; };
@@ -44,6 +46,8 @@
 		E659711F23D8B83D00C01764 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		E659712123DC7D5B00C01764 /* ProcessImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImageViewModel.swift; sourceTree = "<group>"; };
 		E659712423E0A83200C01764 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
+		E6747C072432209B0031A11D /* CenteredButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredButton.swift; sourceTree = "<group>"; };
+		E6747C092432212E0031A11D /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		E68B3FD623CE11CD0015BD04 /* 스샷그램.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "스샷그램.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E68B3FE023CE11CD0015BD04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				E659711D23D8AEA300C01764 /* UIView+.swift */,
+				E6747C092432212E0031A11D /* UIFont+.swift */,
 				E659711F23D8B83D00C01764 /* UIImage+.swift */,
 			);
 			path = Extension;
@@ -121,6 +126,14 @@
 				E659712423E0A83200C01764 /* AppInfoViewController.swift */,
 			);
 			path = "App Info";
+			sourceTree = "<group>";
+		};
+		E6747C06243220890031A11D /* Subview */ = {
+			isa = PBXGroup;
+			children = (
+				E6747C072432209B0031A11D /* CenteredButton.swift */,
+			);
+			path = Subview;
 			sourceTree = "<group>";
 		};
 		E68B3FCD23CE11CD0015BD04 = {
@@ -146,6 +159,7 @@
 		E68B3FD823CE11CD0015BD04 /* InstagramUploader */ = {
 			isa = PBXGroup;
 			children = (
+				E6747C06243220890031A11D /* Subview */,
 				E659711C23D8AE9200C01764 /* Extension */,
 				E659711723D892D600C01764 /* UploadImage */,
 				E659712323E0A82500C01764 /* App Info */,
@@ -336,10 +350,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E659711923D8933400C01764 /* ProcessImageViewController.swift in Sources */,
+				E6747C0A2432212E0031A11D /* UIFont+.swift in Sources */,
 				E659712223DC7D5B00C01764 /* ProcessImageViewModel.swift in Sources */,
 				E659711B23D8ACF700C01764 /* ImageProcessView.swift in Sources */,
 				E659712023D8B83D00C01764 /* UIImage+.swift in Sources */,
 				E68B3FDA23CE11CD0015BD04 /* AppDelegate.swift in Sources */,
+				E6747C082432209B0031A11D /* CenteredButton.swift in Sources */,
 				E659712523E0A83200C01764 /* AppInfoViewController.swift in Sources */,
 				E659711E23D8AEA300C01764 /* UIView+.swift in Sources */,
 			);

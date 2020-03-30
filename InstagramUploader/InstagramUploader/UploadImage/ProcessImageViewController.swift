@@ -51,6 +51,7 @@ final class ProcessImageViewController: UIViewController {
   }
 
   @objc private func didTapPick() {
+
     present(imagePicker, animated: true, completion: nil)
   }
 
@@ -82,6 +83,7 @@ final class ProcessImageViewController: UIViewController {
 
   // MARK: - Views
 
+  /// for Photo Select
   private lazy var imagePicker = UIImagePickerController().then {
     $0.sourceType = .photoLibrary
     $0.delegate = self
@@ -95,28 +97,42 @@ final class ProcessImageViewController: UIViewController {
   ]).then {
     $0.distribution = .fillEqually
     $0.spacing = 16
+    $0.alignment = .center
   }
 
-  private lazy var pickImageButton = UIButton().then {
+  private lazy var pickImageButton = CenteredButton().then {
+    $0.setTitle("New Image", for: .normal)
+    $0.titleLabel?.font = .preferred(ofSize: 10
+      , weight: .regular)
+    $0.setTitleColor(contentColor, for: .normal)
     $0.setImage(UIImage(named: "iconAddPhoto"), for: .normal)
     $0.tintColor = contentColor
     $0.addTarget(self, action: #selector(didTapPick), for: .touchUpInside)
   }
 
-  private lazy var changeBackgroundButton = UIButton().then {
+  private lazy var changeBackgroundButton = CenteredButton().then {
+    $0.setTitle("Background", for: .normal)
+    $0.titleLabel?.font = .preferred(ofSize: 10, weight: .regular)
+    $0.setTitleColor(contentColor, for: .normal)
     $0.isHidden = true
     $0.tintColor = contentColor
     $0.setImage(UIImage(named: "iconBackground"), for: .normal)
     $0.addTarget(self, action: #selector(didTapChangeBackground), for: .touchUpInside)
   }
 
-  private lazy var changeRatioButton = UIButton().then {
+  private lazy var changeRatioButton = CenteredButton().then {
+    $0.setTitle("Ratio", for: .normal)
+    $0.titleLabel?.font = .preferred(ofSize: 10, weight: .regular)
+    $0.setTitleColor(contentColor, for: .normal)
     $0.isHidden = true
     $0.tintColor = contentColor
     $0.addTarget(self, action: #selector(didTapChangeRatio), for: .touchUpInside)
   }
 
-  private lazy var shareButton = UIButton().then {
+  private lazy var shareButton = CenteredButton().then {
+    $0.setTitle("Share", for: .normal)
+    $0.titleLabel?.font = .preferred(ofSize: 10, weight: .regular)
+    $0.setTitleColor(contentColor, for: .normal)
     $0.isHidden = true
     $0.setImage(UIImage(named: "iconAction"), for: .normal)
     $0.tintColor = contentColor
@@ -125,6 +141,12 @@ final class ProcessImageViewController: UIViewController {
 
   /// 실제 편집된 이미지가 표시되는 View
   private lazy var imageProcessView = ImageProcessView(viewModel: viewModel)
+
+  private let guideLabel = UILabel().then {
+    $0.text = "아래 버튼으로 사진을 불러오세요"
+    $0.textAlignment = .center
+    $0.numberOfLines = 0
+  }
 
   private func setupViews() {
     // setup Nav Bar
@@ -146,11 +168,16 @@ final class ProcessImageViewController: UIViewController {
     view.backgroundColor = .systemGray
 
     // setup Layout
-    view.addSubviews(buttonsStackView, imageProcessView)
+    view.addSubviews(buttonsStackView, guideLabel, imageProcessView)
 
     buttonsStackView.snp.makeConstraints {
       $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide).inset(8)
-      $0.height.equalTo(60)
+      $0.height.equalTo(52)
+    }
+
+    guideLabel.snp.makeConstraints {
+      $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(16)
+      $0.bottom.equalTo(buttonsStackView.snp.top).offset(-16)
     }
 
     // Deco
@@ -161,9 +188,8 @@ final class ProcessImageViewController: UIViewController {
     view.insertSubview(stackViewsBackgroundView, belowSubview: buttonsStackView)
 
     stackViewsBackgroundView.snp.makeConstraints {
-      $0.edges.equalTo(buttonsStackView)
+      $0.edges.equalTo(buttonsStackView).inset(UIEdgeInsets(top: -4, left: 0, bottom: -4, right: 0))
     }
-
   }
 
   // MARK: - View Cycle
@@ -193,6 +219,7 @@ extension ProcessImageViewController: UIImagePickerControllerDelegate, UINavigat
     changeBackgroundButton.isHidden = false
     shareButton.isHidden = false
     dismiss(animated: true, completion: nil)
+    self.guideLabel.text = ""
   }
 
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
