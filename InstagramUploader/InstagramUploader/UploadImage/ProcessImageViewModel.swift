@@ -23,11 +23,11 @@ final class ProcessImageViewModel: NSObject {
     var buttonIcon: UIImage? {
       switch self {
       case .square:
-        return UIImage(named: "iconRatio11")
+        return UIImage(named: "iconRatioSquare")
       case .portrait:
-        return UIImage(named: "iconRatio45")
+        return UIImage(named: "iconRatioPortrait")
       case .landscape:
-        return UIImage(named: "iconRatio54")
+        return UIImage(named: "iconRatioLandscape")
       }
     }
 
