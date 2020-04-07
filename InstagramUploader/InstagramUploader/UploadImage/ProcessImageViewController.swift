@@ -31,14 +31,14 @@ final class ProcessImageViewController: UIViewController {
       changeBackgroundButton
           .rx
           .tap
-          .debounce(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+          .throttle(RxTimeInterval.milliseconds(100), latest: false, scheduler: MainScheduler.instance)
           .bind(to: viewModel.backgroundTapEvent)
           .disposed(by: disposeBag)
       
       changeRatioButton
           .rx
           .tap
-          .debounce(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+          .throttle(RxTimeInterval.milliseconds(100), latest: false, scheduler: MainScheduler.instance)
           .bind(to: viewModel.ratioTapEvent)
           .disposed(by: disposeBag)
   }
