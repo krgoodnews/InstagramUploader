@@ -20,14 +20,29 @@ final class ProcessImageViewController: UIViewController {
   private let viewModel: ProcessImageViewModel
   private let disposeBag = DisposeBag()
 
-  private func setupObserver() {
-    viewModel.bindableImageRatio.bind { [weak self] ratio in
-      guard let self = self else { return }
-      self.didSetRatio(ratio)
-    }.disposed(by: disposeBag)
-
+  private func bindOutput() {
+      viewModel.bindableImageRatio.bind { [weak self] ratio in
+          guard let self = self else { return }
+          self.didSetRatio(ratio)
+      }.disposed(by: disposeBag)
   }
-
+  
+  private func bindInput() {
+      changeBackgroundButton
+          .rx
+          .tap
+          .debounce(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+          .bind(to: viewModel.backgroundTapEvent)
+          .disposed(by: disposeBag)
+      
+      changeRatioButton
+          .rx
+          .tap
+          .debounce(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+          .bind(to: viewModel.ratioTapEvent)
+          .disposed(by: disposeBag)
+  }
+    
   // MARK: - Inputs
 
   @objc private func didTapAppInfo() {
@@ -53,14 +68,6 @@ final class ProcessImageViewController: UIViewController {
   @objc private func didTapPick() {
 
     present(imagePicker, animated: true, completion: nil)
-  }
-
-  @objc private func didTapChangeRatio() {
-    viewModel.changeRatio()
-  }
-
-  @objc private func didTapChangeBackground() {
-    viewModel.changeBackground()
   }
 
   // MARK: - Outputs
@@ -110,23 +117,21 @@ final class ProcessImageViewController: UIViewController {
     $0.addTarget(self, action: #selector(didTapPick), for: .touchUpInside)
   }
 
-  private lazy var changeBackgroundButton = CenteredButton().then {
+  private let changeBackgroundButton = CenteredButton().then {
     $0.setTitle("Background", for: .normal)
     $0.titleLabel?.font = .preferred(ofSize: 10, weight: .regular)
     $0.setTitleColor(contentColor, for: .normal)
     $0.isHidden = true
     $0.tintColor = contentColor
     $0.setImage(UIImage(named: "iconBackground"), for: .normal)
-    $0.addTarget(self, action: #selector(didTapChangeBackground), for: .touchUpInside)
   }
 
-  private lazy var changeRatioButton = CenteredButton().then {
+  private let changeRatioButton = CenteredButton().then {
     $0.setTitle("Ratio", for: .normal)
     $0.titleLabel?.font = .preferred(ofSize: 10, weight: .regular)
     $0.setTitleColor(contentColor, for: .normal)
     $0.isHidden = true
     $0.tintColor = contentColor
-    $0.addTarget(self, action: #selector(didTapChangeRatio), for: .touchUpInside)
   }
 
   private lazy var shareButton = CenteredButton().then {
@@ -196,7 +201,8 @@ final class ProcessImageViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupViews()
-    setupObserver()
+    bindInput()
+    bindOutput()
   }
 
   // MARK: - Init
