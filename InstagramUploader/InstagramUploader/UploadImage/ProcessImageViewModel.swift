@@ -51,7 +51,27 @@ final class ProcessImageViewModel: NSObject {
   let bindableImageRatio = BehaviorRelay<ImageRatioType>(value: .portrait)
   let bindableBackground = BehaviorRelay<BackgroundType>(value: .blur)
 
-  func changeRatio() {
+  let backgroundTapEvent = PublishRelay<Void>()
+  let ratioTapEvent = PublishRelay<Void>()
+  
+  private let disposeBag = DisposeBag()
+  
+  override init() {
+      super.init()
+      setupRx()
+  }
+  
+  private func setupRx() {
+      backgroundTapEvent.subscribe(onNext: { [weak self] _ in
+          self?.changeBackground()
+      }).disposed(by: disposeBag)
+      
+      ratioTapEvent.subscribe(onNext: { [weak self] _ in
+          self?.changeRatio()
+      }).disposed(by: disposeBag)
+  }
+
+  private func changeRatio() {
     switch bindableImageRatio.value {
     case .square:
       bindableImageRatio.accept(.portrait)
@@ -62,7 +82,7 @@ final class ProcessImageViewModel: NSObject {
     }
   }
 
-  func changeBackground() {
+  private func changeBackground() {
     switch bindableBackground.value {
     case .blur:
       bindableBackground.accept(.color(.black))
