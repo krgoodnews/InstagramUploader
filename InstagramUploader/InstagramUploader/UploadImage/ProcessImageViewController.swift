@@ -25,6 +25,15 @@ final class ProcessImageViewController: UIViewController {
             guard let self = self else { return }
             self.didSetRatio(ratio)
         }.disposed(by: disposeBag)
+
+        viewModel.bindableImage.bind { [weak self] image in
+            guard let self = self else { return }
+            let isImageNil = image == nil
+            self.changeRatioButton.isHidden = isImageNil
+            self.changeBackgroundButton.isHidden = isImageNil
+            self.shareButton.isHidden = isImageNil
+            self.guideLabel.text = isImageNil ? "아래 버튼으로 사진을 불러오세요" : ""
+        }.disposed(by: disposeBag)
     }
 
     private func bindInput() {
@@ -134,7 +143,7 @@ final class ProcessImageViewController: UIViewController {
     }
 
     private lazy var shareButton = CenteredButton().then {
-        $0.setTitle("Share", for: .normal)
+        $0.setTitle("Save / Share", for: .normal)
         $0.titleLabel?.font = .preferred(ofSize: 10, weight: .regular)
         $0.setTitleColor(contentColor, for: .normal)
         $0.isHidden = true
@@ -217,14 +226,11 @@ final class ProcessImageViewController: UIViewController {
 }
 
 extension ProcessImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let selectedImage = info[.originalImage] as? UIImage else { return }
-        self.imageProcessView.image = selectedImage
-        changeRatioButton.isHidden = false
-        changeBackgroundButton.isHidden = false
-        shareButton.isHidden = false
+        let selectedImage = info[.originalImage] as? UIImage
+        viewModel.selectImageEvent.accept(selectedImage)
         dismiss(animated: true, completion: nil)
-        self.guideLabel.text = ""
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

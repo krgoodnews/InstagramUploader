@@ -24,6 +24,11 @@ final class ImageProcessView: UIView {
                 self.updateBackground(background)
             }
         }.disposed(by: disposeBag)
+
+        viewModel.bindableImage.bind { [weak self] image in
+            guard let self = self else { return }
+            self.image = image
+        }.disposed(by: disposeBag)
     }
 
     private func updateBackground(_ background: ProcessImageViewModel.BackgroundType) {
@@ -35,7 +40,7 @@ final class ImageProcessView: UIView {
         }
     }
 
-    var image: UIImage? {
+    private var image: UIImage? {
         didSet {
             backgroundImageView.image = image?.blurred(radius: 50)
             imageView.image = image

@@ -51,10 +51,12 @@ final class ProcessImageViewModel: NSObject {
     // Inputs
     let backgroundTapEvent = PublishRelay<Void>()
     let ratioTapEvent = PublishRelay<Void>()
+    let selectImageEvent = PublishRelay<UIImage?>()
 
     // Outputs
     let bindableImageRatio = BehaviorRelay<ImageRatioType>(value: .portrait)
     let bindableBackground = BehaviorRelay<BackgroundType>(value: .blur)
+    let bindableImage = BehaviorRelay<UIImage?>(value: nil)
 
     private let disposeBag = DisposeBag()
 
@@ -70,6 +72,10 @@ final class ProcessImageViewModel: NSObject {
 
         ratioTapEvent.subscribe(onNext: { [weak self] _ in
             self?.changeRatio()
+        }).disposed(by: disposeBag)
+
+        selectImageEvent.subscribe(onNext: { [weak self] image in
+            self?.bindableImage.accept(image)
         }).disposed(by: disposeBag)
     }
 
@@ -92,42 +98,4 @@ final class ProcessImageViewModel: NSObject {
             bindableBackground.accept(.blur)
         }
     }
-
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            print(error)
-            return
-        }
-
-        let fetchOptions = PHFetchOptions().then {
-            $0.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        }
-
-        let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        if let lastAsset = fetchResult.firstObject {
-            let url = URL(string: "instagram://library?LocalIdentifier=\(lastAsset.localIdentifier)")!
-
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-            } else {
-                let alertController = UIAlertController(title: "Error",
-                                                        message: "Instagram is not installed",
-                                                        preferredStyle: .alert)
-
-                alertController.addAction(UIAlertAction(title: "OK",
-                                                        style: .default,
-                                                        handler: nil))
-
-                let keyWindow = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first
-                if var topController = keyWindow?.rootViewController {
-                    while let presentedViewController = topController.presentedViewController {
-                        topController = presentedViewController
-                    }
-                    topController.present(alertController, animated: true, completion: nil)
-                }
-
-            }
-        }
-    }
-
 }

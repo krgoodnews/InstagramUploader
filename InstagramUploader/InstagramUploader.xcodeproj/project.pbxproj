@@ -17,6 +17,7 @@
 		E659712523E0A83200C01764 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659712423E0A83200C01764 /* AppInfoViewController.swift */; };
 		E6747C082432209B0031A11D /* CenteredButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6747C072432209B0031A11D /* CenteredButton.swift */; };
 		E6747C0A2432212E0031A11D /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6747C092432212E0031A11D /* UIFont+.swift */; };
+		E67E997E2446F98100953DAE /* Bool+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E997D2446F98100953DAE /* Bool+.swift */; };
 		E68B3FDA23CE11CD0015BD04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */; };
 		E68B3FE123CE11CD0015BD04 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E68B3FDF23CE11CD0015BD04 /* Main.storyboard */; };
 		E68B3FE323CE11D00015BD04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E68B3FE223CE11D00015BD04 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 		E659712423E0A83200C01764 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		E6747C072432209B0031A11D /* CenteredButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredButton.swift; sourceTree = "<group>"; };
 		E6747C092432212E0031A11D /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		E67E997D2446F98100953DAE /* Bool+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+.swift"; sourceTree = "<group>"; };
 		E68B3FD623CE11CD0015BD04 /* 스샷그램.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "스샷그램.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E68B3FD923CE11CD0015BD04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E68B3FE023CE11CD0015BD04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				E659711D23D8AEA300C01764 /* UIView+.swift */,
 				E6747C092432212E0031A11D /* UIFont+.swift */,
 				E659711F23D8B83D00C01764 /* UIImage+.swift */,
+				E67E997D2446F98100953DAE /* Bool+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				E68B3FE823CE11D00015BD04 /* Sources */,
 				E68B3FE923CE11D00015BD04 /* Frameworks */,
 				E68B3FEA23CE11D00015BD04 /* Resources */,
+				C2033613C9C9DD8480C9E2C7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -303,6 +307,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C2033613C9C9DD8480C9E2C7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-InstagramUploaderTests/Pods-InstagramUploaderTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-InstagramUploaderTests/Pods-InstagramUploaderTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-InstagramUploaderTests/Pods-InstagramUploaderTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D0AC431937FEAA1A6848A76F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,6 +379,7 @@
 				E6747C082432209B0031A11D /* CenteredButton.swift in Sources */,
 				E659712523E0A83200C01764 /* AppInfoViewController.swift in Sources */,
 				E659711E23D8AEA300C01764 /* UIView+.swift in Sources */,
+				E67E997E2446F98100953DAE /* Bool+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,7 +594,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InstagramUploader.app/InstagramUploader";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/스샷그램.app/스샷그램";
 			};
 			name = Debug;
 		};
@@ -595,7 +617,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InstagramUploader.app/InstagramUploader";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/스샷그램.app/스샷그램";
 			};
 			name = Release;
 		};
