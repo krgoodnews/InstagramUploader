@@ -20,6 +20,20 @@
                ReferencedContainer = "container:InstagramUploader.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E68B3FEB23CE11D00015BD04"
+               BuildableName = "InstagramUploaderTests.xctest"
+               BlueprintName = "InstagramUploaderTests"
+               ReferencedContainer = "container:InstagramUploader.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
