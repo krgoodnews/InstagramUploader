@@ -43,7 +43,7 @@ final class ProcessImageViewModel: NSObject {
         }
     }
 
-    enum BackgroundType {
+    enum BackgroundType: Equatable {
         case blur
         case color(UIColor)
     }
