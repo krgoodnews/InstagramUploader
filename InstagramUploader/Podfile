@@ -19,6 +19,9 @@ target 'InstagramUploader' do
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
 
+  # Show Library List
+  pod 'VTAcknowledgementsViewController'
+
   target 'InstagramUploaderTests' do
     # Pods for testing
     pod 'RxBlocking', '~> 5'
